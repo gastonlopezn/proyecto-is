@@ -3,7 +3,11 @@ Taller Ingenieria de Software I (2026).
 
 # Proyecto Ingeniería de Software I (3385) | 2026
 
-//tabla integrantes
+| N.º | Nombre y apellido | DNI |
+|:---:|---|:---:|
+| 1 | Gastón Nicolás López | 47.463.500 |
+| 2 | Juan Manuel Martin | 47.911.017 |
+| 3 | Juan Cruz Uva Britos | 47.363.325 |
 
 ### 1. Idea del proyecto
 
