@@ -11,7 +11,7 @@ Taller Ingenieria de Software I (2026).
 
 ### 1. Idea del proyecto
 
-La idea de este proyecto nace del sitio web de predicciones *PolyMarket*, donde un usuario realiza una publicación de un posible hecho en la vida real, y otros usuarios compran y venden acciones basadas en la probabilidad de que eso ocurra (o no). Algunos ejemplos pueden ser: ¿Alcanzará Bitcoin los 200.000 dólares antes de finales de 2026?, ¿Quién gana las elecciones de Brasil?, entre otros.
+La idea de este proyecto nace del sitio web de predicciones *PolyMarket*, donde un usuario o un LLM realiza una publicación en forma de pregunta sobre un hecho de la vida real, y otros usuarios compran y venden 'acciones' de cada respuesta basadas en la probabilidad de que eso ocurra (o no), esto provoca que el precio de las mismas vaya oscilando hasta la fecha límite de la pregunta, cuando se confirma cuál es la respuesta correcta y ganan los que compraron 'acciones' de esa respuesta. Algunos ejemplos pueden ser: ¿Alcanzará Bitcoin los 200.000 dólares antes de finales de 2026?, ¿Quién gana las elecciones de Brasil?, entre otros.
 
 ### 2. Justificación de la aplicación del patrón de diseño
 
