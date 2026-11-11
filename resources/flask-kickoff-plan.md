@@ -1220,19 +1220,19 @@ Debe incluir:
 - [ x ] `uv.lock`  
 - [ x ] Flask  
 - [ x ] Application Factory  
-- [ ] Blueprint  
-- [ ] `/health`  
-- [ ] HTML con Jinja  
-- [ ] CSS  
-- [ ] SQLAlchemy  
-- [ ] User model  
-- [ ] Alembic  
+- [ x ] Blueprint  
+- [ x ] `/health`  
+- [ x ] HTML con Jinja  
+- [ x ] CSS  
+- [ x ] SQLAlchemy  
+- [ x ] User model  
+- [ x ] Alembic  
 - [ ] Primera migration  
-- [ ] pytest  
-- [ ] Ruff  
-- [ ] README  
+- [ x ] pytest  
+- [ x ] Ruff  
+- [ x ] README  
 - [ ] `.env.example`  
-- [ ] No secrets committed
+- [ x ] No secrets committed
 
 ---
 

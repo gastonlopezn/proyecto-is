@@ -18,3 +18,46 @@ La idea de este proyecto nace del sitio web de predicciones *PolyMarket*, donde 
 1. **Patrón *Strategy* (Comportamiento):**
 * **Problema que resuelve:** Nuestro sistema necesita generar contenido de manera automática y verificar fuentes usando distintos proveedores de inteligencia artificial conocidos (`Gemini`, `Claude`, `LocalLLM`), evitando que la clase principal de contexto quede fuertemente conectada a una implementación específica, situación que podria generar problemas.
 * **Aplicación en el diseño:** Se implementó una interfaz común `StrategyLLM` que define los contratos operativos (`createQuestion()`, `checkSource()`), permitiendo que la clase `LLM` delegue dinámicamente la ejecución en distintas instancias de strategy de manera simple e intercambiable.
+
+---
+
+### 3. Ejecución del proyecto
+
+#### Requisitos previos
+- [uv](https://docs.astral.sh/uv/) (gestor de entornos y dependencias de Python)
+- Python >= 3.14
+
+#### Instalación y sincronización de dependencias
+Clonar el repositorio y sincronizar el entorno virtual con:
+
+```sh
+uv sync
+```
+
+#### Ejecutar el servidor de desarrollo
+Iniciar la aplicación Flask:
+
+```sh
+uv run flask --app myapp run
+```
+
+La aplicación estará disponible en `http://localhost:5000`:
+- **Health check (JSON):** `http://localhost:5000/health`
+- **Página de usuarios (HTML):** `http://localhost:5000/users`
+
+Para correr en modo debug:
+
+```sh
+uv run flask --app myapp run --debug
+```
+
+#### Tests y calidad de código
+- **Ejecutar tests con pytest:**
+  ```sh
+  uv run pytest
+  ```
+- **Verificar formato y linter con Ruff:**
+  ```sh
+  uv run ruff check .
+  uv run ruff format .
+  ```
