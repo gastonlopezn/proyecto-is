@@ -1217,9 +1217,9 @@ Debe incluir:
 
 - [ x ] Repository GitHub  
 - [ x ] `pyproject.toml`  
-- [ ] `uv.lock`  
-- [ ] Flask  
-- [ ] Application Factory  
+- [ x ] `uv.lock`  
+- [ x ] Flask  
+- [ x ] Application Factory  
 - [ ] Blueprint  
 - [ ] `/health`  
 - [ ] HTML con Jinja  
