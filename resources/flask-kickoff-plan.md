@@ -1215,8 +1215,8 @@ La primera entrega puede ser:
 
 Debe incluir:
 
-- [ ] Repository GitHub  
-- [ ] `pyproject.toml`  
+- [ x ] Repository GitHub  
+- [ x ] `pyproject.toml`  
 - [ ] `uv.lock`  
 - [ ] Flask  
 - [ ] Application Factory  
