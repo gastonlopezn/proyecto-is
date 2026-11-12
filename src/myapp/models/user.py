@@ -1,9 +1,9 @@
 from myapp.extensions import db
-from myapp.models import prediction_author
+from myapp.models.prediction_author import PredictionAuthor
 from myapp.models.role_type import RoleType
 
 
-class User(prediction_author, db.Model):
+class User(PredictionAuthor, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120), nullable=False)
     email = db.Column(db.String(255), nullable=False, unique=True)
