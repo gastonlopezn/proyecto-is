@@ -1,4 +1,5 @@
 from myapp.models.category import Category
+from myapp.models.position import Position
 from myapp.models.prediction_author import PredictionAuthor
 from myapp.models.question import Question
 from myapp.models.question_tag import question_tag
@@ -10,6 +11,7 @@ from myapp.models.user import User
 
 __all__ = [
     "Category",
+    "Position",
     "PredictionAuthor",
     "Question",
     "Response",

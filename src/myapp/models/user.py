@@ -11,6 +11,12 @@ class User(PredictionAuthor, db.Model):
     balance = db.Column(db.Float, default=0.0)
     role = db.Column(db.Enum(RoleType), nullable=False, default='user')
 
+    positions = db.relationship(
+        "Position",
+        back_populates="user",
+        cascade="all, delete-orphan",
+    )
+
     def __repr__(self): 
         return f"<User {self.email}>"
 

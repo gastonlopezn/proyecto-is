@@ -20,6 +20,11 @@ class Response(db.Model):
         nullable=False,
     )
     question = db.relationship("Question", back_populates="responses")
+    positions = db.relationship(
+        "Position",
+        back_populates="response",
+        cascade="all, delete-orphan",
+    )
 
     def calculate_probability(self):
         pass
