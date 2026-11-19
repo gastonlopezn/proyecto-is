@@ -12,9 +12,11 @@ def create_app(config_class=Config):
     db.init_app(app)
 
     from myapp.api.health import health_bp
+    from myapp.web.auth import auth_bp
     from myapp.web.users import users_bp
 
     app.register_blueprint(health_bp)
+    app.register_blueprint(auth_bp)
     app.register_blueprint(users_bp)
 
     from myapp.commands import register_commands
