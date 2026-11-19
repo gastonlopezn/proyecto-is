@@ -54,8 +54,13 @@ class Question(db.Model):
         cascade="all, delete-orphan",
     )
 
+    def __init__(self, **kwargs):
+        kwargs.setdefault("state", StateType.OPEN)
+        super().__init__(**kwargs)
+
     def has_enough_responses(self) -> bool:
         return len(self.responses) >= self.MIN_RESPONSES
 
     def __repr__(self) -> str:
-        return f"<Question {self.title!r} (State: {self.state.value})>"
+        state_value = self.state.value if self.state is not None else None
+        return f"<Question {self.title!r} (State: {state_value})>"
