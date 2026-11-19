@@ -17,4 +17,8 @@ def create_app(config_class=Config):
     app.register_blueprint(health_bp)
     app.register_blueprint(users_bp)
 
+    from myapp.commands import register_commands
+
+    register_commands(app)
+
     return app

@@ -45,6 +45,15 @@ La aplicación estará disponible en `http://localhost:5000`:
 - **Health check (JSON):** `http://localhost:5000/health`
 - **Página de usuarios (HTML):** `http://localhost:5000/users`
 
+#### Cargar las categorías iniciales
+Con la base de datos ya creada (migraciones aplicadas), cargar las categorías predefinidas:
+
+```sh
+uv run flask --app myapp seed-categories
+```
+
+El comando es idempotente: si se ejecuta más de una vez no crea categorías duplicadas. La lista está en `src/myapp/services/categories.py`.
+
 Para correr en modo debug:
 
 ```sh
