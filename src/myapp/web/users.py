@@ -14,3 +14,14 @@ def index():
         users=users,
     )
 
+
+@users_bp.get("/register")
+def new():
+    return render_template("users/register.html")
+
+
+@users_bp.post("/")
+def create():
+    pass
+
+
