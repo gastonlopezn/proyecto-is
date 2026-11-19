@@ -34,6 +34,32 @@ Clonar el repositorio y sincronizar el entorno virtual con:
 uv sync
 ```
 
+#### Variables de entorno
+Copiar el archivo de ejemplo y ajustar las variables si es necesario (nunca subir `.env` al repositorio):
+
+```sh
+cp .env.example .env
+```
+
+#### Migraciones de base de datos (Alembic)
+Para aplicar las migraciones existentes a la base de datos:
+
+```sh
+uv run alembic -c migrations/alembic.ini upgrade head
+```
+
+Para generar una nueva migración luego de modificar modelos:
+
+```sh
+uv run alembic -c migrations/alembic.ini revision --autogenerate -m "descripcion del cambio"
+```
+
+Para revertir la última migración aplicada:
+
+```sh
+uv run alembic -c migrations/alembic.ini downgrade -1
+```
+
 #### Ejecutar el servidor de desarrollo
 Iniciar la aplicación Flask:
 
