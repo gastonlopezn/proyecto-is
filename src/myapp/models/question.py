@@ -2,11 +2,15 @@ import uuid
 from datetime import UTC, datetime
 
 from myapp.extensions import db
+from myapp.models.question_tag import question_tag
 from myapp.models.state_type import StateType
 
 
 class Question(db.Model):
     __tablename__ = "question"
+
+    # Mínimo de respuestas que debe tener una pregunta (multiplicidad 2..* en el UML).
+    MIN_RESPONSES = 2
 
     id = db.Column(db.Uuid, primary_key=True, default=uuid.uuid4)
     title = db.Column(db.String(255), nullable=False)
@@ -26,6 +30,32 @@ class Question(db.Model):
         nullable=False,
         default=StateType.OPEN,
     )
+
+    # Cada pregunta pertenece a exactamente una categoría.
+    category_title = db.Column(
+        db.String,
+        db.ForeignKey("category.title"),
+        nullable=False,
+    )
+    category = db.relationship("Category", back_populates="questions")
+
+    # Cero o más tags, a través de la tabla de asociación question_tag.
+    # Al borrar la pregunta, SQLAlchemy elimina sus filas en question_tag.
+    tags = db.relationship(
+        "Tag",
+        secondary=question_tag,
+        back_populates="questions",
+    )
+
+    # Dos o más respuestas; se borran junto con la pregunta.
+    responses = db.relationship(
+        "Response",
+        back_populates="question",
+        cascade="all, delete-orphan",
+    )
+
+    def has_enough_responses(self) -> bool:
+        return len(self.responses) >= self.MIN_RESPONSES
 
     def __repr__(self) -> str:
         return f"<Question {self.title!r} (State: {self.state.value})>"
