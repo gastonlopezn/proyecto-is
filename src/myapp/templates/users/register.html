@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Register</h1>
+
+{% if error %}
+  <div class="error-message">
+    <p>{{ error }}</p>
+  </div>
+{% endif %}
+
+<form method="post" action="{{ url_for('users.create') }}">
+  <div>
+    <label for="name">Name</label>
+    <input type="text" id="name" name="name" value="{{ name or '' }}">
+  </div>
+
+  <div>
+    <label for="email">Email</label>
+    <input type="email" id="email" name="email" value="{{ email or '' }}">
+  </div>
+
+  <div>
+    <label for="password">Password</label>
+    <input type="password" id="password" name="password">
+  </div>
+
+  <button type="submit">Register</button>
+</form>
+{% endblock %}
