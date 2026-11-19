@@ -32,6 +32,11 @@ class Position(db.Model):
     user = db.relationship("User", back_populates="positions")
     response = db.relationship("Response", back_populates="positions")
 
+    def __init__(self, **kwargs):
+        if "quantity" in kwargs:
+            self.validate_quantity("quantity", kwargs["quantity"])
+        super().__init__(**kwargs)
+
     @validates("quantity")
     def validate_quantity(self, _key: str, value: float) -> float:
         if value is None or value < 0:
