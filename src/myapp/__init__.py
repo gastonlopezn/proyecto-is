@@ -13,9 +13,15 @@ def create_app(config_class=Config):
     migrate.init_app(app, db)
     
     from myapp.api.health import health_bp
+    from myapp.web.auth import auth_bp
     from myapp.web.users import users_bp
 
     app.register_blueprint(health_bp)
+    app.register_blueprint(auth_bp)
     app.register_blueprint(users_bp)
+
+    from myapp.commands import register_commands
+
+    register_commands(app)
 
     return app
