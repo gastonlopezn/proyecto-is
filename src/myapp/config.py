@@ -8,3 +8,7 @@ class Config:
         "sqlite:///app.db",
     )
 
+
+class TestingConfig(Config):
+    TESTING = True
+    SQLALCHEMY_DATABASE_URI = "sqlite:///:memory:"
