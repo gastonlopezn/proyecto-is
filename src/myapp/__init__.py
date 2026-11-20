@@ -1,7 +1,7 @@
 from flask import Flask
 
 from myapp.config import Config
-from myapp.extensions import db
+from myapp.extensions import db, migrate
 
 
 def create_app(config_class=Config):
@@ -10,7 +10,8 @@ def create_app(config_class=Config):
     app.config.from_object(config_class)
 
     db.init_app(app)
-
+    migrate.init_app(app, db)
+    
     from myapp.api.health import health_bp
     from myapp.web.auth import auth_bp
     from myapp.web.users import users_bp
