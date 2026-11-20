@@ -8,7 +8,7 @@ def make_user(email: str = "trader@example.com", name: str = "Trader") -> User:
     user = User(
         name=name,
         email=email,
-        password="hashed-password",
+        password_hash="hashed-password",
         balance=1000.0,
         role=RoleType.POLYUSER,
     )

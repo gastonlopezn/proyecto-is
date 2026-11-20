@@ -28,7 +28,7 @@ def authenticate_user(email: str, password: str) -> User | None:
     user = db.session.scalars(
         db.select(User).where(User.email == normalized_email)
     ).first()
-    if user is None or not verify_password(user.password, password):
+    if user is None or not verify_password(user.password_hash, password):
         return None
     return user
 

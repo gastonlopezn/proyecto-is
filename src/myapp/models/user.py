@@ -10,7 +10,7 @@ class User(PredictionAuthor, db.Model):
     email = db.Column(db.String(255), nullable=False, unique=True)
     password_hash = db.Column(db.String(255), nullable=False)
     balance = db.Column(db.Float, default=0.0)
-    role = db.Column(db.Enum(RoleType), nullable=False, default='user')
+    role = db.Column(db.Enum(RoleType), nullable=False, default=RoleType.POLYUSER)
 
     positions = db.relationship(
         "Position",
@@ -25,4 +25,4 @@ class User(PredictionAuthor, db.Model):
         return check_password_hash(self.password_hash, password)
 
     def __repr__(self):
-        return f"<User {self.email}>"
+        return f"<User {self.email}>"
