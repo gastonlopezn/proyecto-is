@@ -19,7 +19,7 @@ def create_user(
     user = User(
         name=name,
         email=email,
-        password=hash_password(password),
+        password_hash=hash_password(password),
         balance=0.0,
         role=role,
     )
