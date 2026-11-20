@@ -17,6 +17,14 @@
 <header>
   <nav>
     <a href="{{ url_for('users.index') }}">Users</a>
+    {% if g.user %}
+      <span>{{ g.user.name }} ({{ g.user.role.value }})</span>
+      <form method="post" action="{{ url_for('auth.logout') }}" style="display: inline;">
+        <button type="submit">Logout</button>
+      </form>
+    {% else %}
+      <a href="{{ url_for('auth.login') }}">Login</a>
+    {% endif %}
   </nav>
 </header>
 
