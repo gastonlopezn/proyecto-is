@@ -68,3 +68,18 @@ def test_authenticated_user_sees_signed_in_notice_on_login_page(client):
     assert "auth-alert--info" in html
     assert "UX Tester" in html
     assert "ADMIN" in html
+
+
+def test_register_page_shares_auth_ui_and_accessibility_controls(client):
+    response = client.get("/users/register")
+    html = response.get_data(as_text=True)
+
+    assert response.status_code == 200
+    assert "css/auth.css" in html
+    assert "js/auth.js" in html
+    assert 'class="auth-card"' in html
+    assert 'autocomplete="name"' in html
+    assert 'autocomplete="email"' in html
+    assert 'autocomplete="new-password"' in html
+    assert "data-toggle-password" in html
+    assert 'href="/login"' in html
