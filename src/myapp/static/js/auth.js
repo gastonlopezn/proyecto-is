@@ -29,8 +29,8 @@ document.addEventListener("DOMContentLoaded", () => {
       );
 
       if (iconShow && iconHide) {
-        iconShow.hidden = isHidden;
-        iconHide.hidden = !isHidden;
+        iconShow.toggleAttribute("hidden", isHidden);
+        iconHide.toggleAttribute("hidden", !isHidden);
       }
     });
   }
