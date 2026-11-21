@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}{{ question.title }}{% endblock %}
+
+{% block content %}
+<h1>{{ question.title }}</h1>
+<p>{{ question.body }}</p>
+<p>Category: {{ question.category_title }}</p>
+<p>State: {{ question.state.value }}</p>
+{% if question.source %}
+  <p>Source: {{ question.source }}</p>
+{% endif %}
+
+{% if question.tags %}
+  <ul>
+    {% for tag in question.tags %}
+      <li>{{ tag.title }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
+
+{% if question.responses %}
+  <ul>
+    {% for response in question.responses %}
+      <li>{{ response.title }} ({{ response.price }})</li>
+    {% endfor %}
+  </ul>
+{% endif %}
+{% endblock %}
