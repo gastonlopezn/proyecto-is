@@ -4,6 +4,7 @@ from flask import Blueprint, abort, redirect, render_template, url_for
 
 from myapp.extensions import db
 from myapp.models.question import Question
+from myapp.services.categories import get_all_categories
 
 questions_bp = Blueprint("questions", __name__, url_prefix="/questions")
 
@@ -50,9 +51,11 @@ def detail(question_id: str):
 @questions_bp.get("/<question_id>/edit")
 def edit(question_id: str):
     question = get_question_or_404(question_id)
+    categories = get_all_categories()
     return render_template(
-        "questions/detail.html",
+        "questions/edit.html",
         question=question,
+        categories=categories,
     )
 
 
