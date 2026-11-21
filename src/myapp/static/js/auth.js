@@ -1,16 +1,18 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const emailInput = document.getElementById("email");
+  const form = document.querySelector("[data-auth-form]");
   const passwordInput = document.getElementById("password");
   const toggleBtn = document.querySelector("[data-toggle-password]");
-  const form = document.querySelector("[data-auth-form]");
   const submitBtn = form ? form.querySelector('button[type="submit"]') : null;
 
-  if (emailInput && passwordInput) {
-    if (emailInput.value.trim()) {
-      passwordInput.focus();
-    } else {
-      emailInput.focus();
-    }
+  if (form) {
+    const focusOrder = [
+      document.getElementById("name"),
+      document.getElementById("email"),
+      passwordInput,
+    ].filter(Boolean);
+
+    const firstEmpty = focusOrder.find((input) => !input.value.trim());
+    (firstEmpty || focusOrder[focusOrder.length - 1])?.focus();
   }
 
   if (toggleBtn && passwordInput) {
@@ -36,7 +38,10 @@ document.addEventListener("DOMContentLoaded", () => {
   if (form && submitBtn) {
     form.addEventListener("submit", () => {
       submitBtn.disabled = true;
-      submitBtn.textContent = "Signing in...";
+      const loadingText = submitBtn.getAttribute("data-loading-text");
+      if (loadingText) {
+        submitBtn.textContent = loadingText;
+      }
     });
   }
 });

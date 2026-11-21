@@ -183,6 +183,15 @@
   outline-offset: 1px;
 }
 
+.auth-password-toggle [hidden] {
+  display: none;
+}
+
+.auth-hint {
+  font-size: 0.8rem;
+  color: #64748b;
+}
+
 .auth-submit {
   margin-top: 0.35rem;
   width: 100%;
