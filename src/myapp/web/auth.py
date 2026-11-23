@@ -1,4 +1,4 @@
-from flask import Blueprint, g, redirect, render_template, request, url_for
+from flask import Blueprint, flash, g, redirect, render_template, request, url_for
 
 from myapp.services.auth import (
     authenticate_user,
@@ -52,4 +52,5 @@ def login_submit():
 @auth_bp.post("/logout")
 def logout():
     logout_user()
+    flash("You have been signed out successfully.", "success")
     return redirect(url_for("auth.login"))
