@@ -69,7 +69,20 @@ uv run flask --app myapp run
 
 La aplicación estará disponible en `http://localhost:5000`:
 - **Health check (JSON):** `http://localhost:5000/health`
+- **CRUD de Preguntas:** `http://localhost:5000/questions`
 - **Página de usuarios (HTML):** `http://localhost:5000/users`
+
+#### Rutas del CRUD de Preguntas (`/questions`)
+
+| Método HTTP | Ruta | Descripción / Acción |
+| :--- | :--- | :--- |
+| `GET` | `/questions/` | Muestra el listado de todas las preguntas creadas. |
+| `GET` | `/questions/new` | Muestra el formulario para crear una nueva pregunta. |
+| `POST` | `/questions` | Procesa y almacena una nueva pregunta. |
+| `GET` | `/questions/<question_id>` | Muestra el detalle de una pregunta específica (incluyendo respuestas, estado, etiquetas, etc.). |
+| `GET` | `/questions/<question_id>/edit` | Muestra el formulario para editar una pregunta existente. |
+| `POST` | `/questions/<question_id>` | Procesa la actualización de una pregunta existente. |
+| `POST` | `/questions/<question_id>/delete` | Elimina una pregunta existente. |
 
 #### Cargar las categorías iniciales
 Con la base de datos ya creada (migraciones aplicadas), cargar las categorías predefinidas:
