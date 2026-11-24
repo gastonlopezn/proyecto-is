@@ -30,3 +30,7 @@ dev = [
     "pytest>=9.1.1",
     "ruff>=0.17.2",
 ]
+
+[tool.ruff]
+# Las migraciones las genera Alembic automáticamente; no las lintamos.
+extend-exclude = ["migrations/versions"]
