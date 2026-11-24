@@ -53,7 +53,8 @@ def test_logout_displays_confirmation_banner_on_login_page(client):
     html = response.get_data(as_text=True)
 
     assert response.status_code == 200
-    assert "You have been signed out successfully." in html
+    assert html.count("You have been signed out successfully.") == 1
+    assert 'class="flashes"' not in html
     assert "auth-alert--success" in html
 
 
