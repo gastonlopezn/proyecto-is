@@ -9,11 +9,12 @@
   <ul>
     {% for question in questions %}
       <li>
-        {{ question.title }} — {{ question.category_title }} ({{ question.state.value }})
+        <a href="{{ url_for('questions.detail', question_id=question.id) }}">{{ question.title }}</a>
+        — {{ question.category_title }} — {{ question.date.strftime('%Y-%m-%d') }} — ({{ question.state.value }})
       </li>
     {% endfor %}
   </ul>
 {% else %}
-  <p>No questions found.</p>
+  <p>No questions yet.</p>
 {% endif %}
 {% endblock %}
