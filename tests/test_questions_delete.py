@@ -1,3 +1,5 @@
+import uuid
+
 from myapp.extensions import db
 from myapp.models import Category, Question, Response, Tag, question_tag
 
@@ -65,3 +67,32 @@ def test_delete_question_removes_related_responses_and_tag_associations_only(
     assert db.session.get(Question, kept_id) is not None
     for resp_id in kept_response_ids:
         assert db.session.get(Response, resp_id) is not None
+
+
+def test_delete_non_existent_question_returns_404_and_preserves_existing_data(
+    client, question
+):
+    missing_uuid = uuid.uuid4()
+    response = client.post(f"/questions/{missing_uuid}/delete")
+
+    assert response.status_code == 404
+    db.session.expire_all()
+    assert db.session.get(Question, question.id) is not None
+    assert len(db.session.scalars(db.select(Response)).all()) == 2
+    assert len(db.session.execute(db.select(question_tag)).all()) == 1
+
+
+def test_delete_malformed_question_id_returns_404(client):
+    response = client.post("/questions/not-a-valid-uuid/delete")
+
+    assert response.status_code == 404
+
+
+def test_deleting_already_deleted_question_returns_404(client, question):
+    question_id = question.id
+
+    first_response = client.post(f"/questions/{question_id}/delete")
+    assert first_response.status_code == 302
+
+    second_response = client.post(f"/questions/{question_id}/delete")
+    assert second_response.status_code == 404
