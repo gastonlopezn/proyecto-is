@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}New Question{% endblock %}
+
+{% block content %}
+<h1>New Question</h1>
+
+{% set form_action = url_for('questions.create') %}
+{% set submit_label = "Create question" %}
+{% include "questions/_form.html" %}
+{% endblock %}

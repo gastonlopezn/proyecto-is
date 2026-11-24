@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Question{% endblock %}
+
+{% block content %}
+<h1>Edit Question</h1>
+
+{% set form_action = url_for('questions.update', question_id=question.id) %}
+{% set submit_label = "Save changes" %}
+{% include "questions/_form.html" %}
+{% endblock %}

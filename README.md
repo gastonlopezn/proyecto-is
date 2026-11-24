@@ -34,6 +34,32 @@ Clonar el repositorio y sincronizar el entorno virtual con:
 uv sync
 ```
 
+#### Variables de entorno
+Copiar el archivo de ejemplo y ajustar las variables si es necesario (nunca subir `.env` al repositorio):
+
+```sh
+cp .env.example .env
+```
+
+#### Migraciones de base de datos (Alembic)
+Para aplicar las migraciones existentes a la base de datos:
+
+```sh
+uv run alembic -c migrations/alembic.ini upgrade head
+```
+
+Para generar una nueva migración luego de modificar modelos:
+
+```sh
+uv run alembic -c migrations/alembic.ini revision --autogenerate -m "descripcion del cambio"
+```
+
+Para revertir la última migración aplicada:
+
+```sh
+uv run alembic -c migrations/alembic.ini downgrade -1
+```
+
 #### Ejecutar el servidor de desarrollo
 Iniciar la aplicación Flask:
 
@@ -43,7 +69,29 @@ uv run flask --app myapp run
 
 La aplicación estará disponible en `http://localhost:5000`:
 - **Health check (JSON):** `http://localhost:5000/health`
+- **CRUD de Preguntas:** `http://localhost:5000/questions`
 - **Página de usuarios (HTML):** `http://localhost:5000/users`
+
+#### Rutas del CRUD de Preguntas (`/questions`)
+
+| Método HTTP | Ruta | Descripción / Acción |
+| :--- | :--- | :--- |
+| `GET` | `/questions/` | Muestra el listado de todas las preguntas creadas. |
+| `GET` | `/questions/new` | Muestra el formulario para crear una nueva pregunta. |
+| `POST` | `/questions` | Procesa y almacena una nueva pregunta. |
+| `GET` | `/questions/<question_id>` | Muestra el detalle de una pregunta específica (incluyendo respuestas, estado, etiquetas, etc.). |
+| `GET` | `/questions/<question_id>/edit` | Muestra el formulario para editar una pregunta existente. |
+| `POST` | `/questions/<question_id>` | Procesa la actualización de una pregunta existente. |
+| `POST` | `/questions/<question_id>/delete` | Elimina una pregunta existente. |
+
+#### Cargar las categorías iniciales
+Con la base de datos ya creada (migraciones aplicadas), cargar las categorías predefinidas:
+
+```sh
+uv run flask --app myapp seed-categories
+```
+
+El comando es idempotente: si se ejecuta más de una vez no crea categorías duplicadas. La lista está en `src/myapp/services/categories.py`.
 
 Para correr en modo debug:
 

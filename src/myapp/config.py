@@ -1,4 +1,8 @@
 import os
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+INSTANCE_DIR = BASE_DIR / "instance"
 
 
 class Config:
@@ -8,3 +12,7 @@ class Config:
         "sqlite:///app.db",
     )
 
+
+class TestingConfig(Config):
+    TESTING = True
+    SQLALCHEMY_DATABASE_URI = "sqlite:///:memory:"

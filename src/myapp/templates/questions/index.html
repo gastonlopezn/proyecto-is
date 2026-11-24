@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}Questions{% endblock %}
+
+{% block content %}
+<div class="page-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+  <h1>Questions</h1>
+  <a href="{{ url_for('questions.new') }}" class="btn" style="text-decoration: none;">New Question</a>
+</div>
+
+{% if questions %}
+  <ul class="questions-list">
+    {% for question in questions %}
+      <li>
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; flex-wrap: wrap;">
+          <div style="flex: 1; min-width: 250px;">
+            <a href="{{ url_for('questions.detail', question_id=question.id) }}">{{ question.title }}</a>
+            <p style="margin: 0.5rem 0 0 0; color: var(--text-muted); font-size: 0.95rem;">
+              {{ question.body[:120] }}{% if question.body|length > 120 %}...{% endif %}
+            </p>
+          </div>
+          <div style="display: flex; gap: 1rem; align-items: center; font-size: 0.9rem; color: var(--text-muted);">
+            <span class="tag-badge">{{ question.category_title }}</span>
+            <span>{{ question.date.strftime('%Y-%m-%d') }}</span>
+            <span style="font-weight: 500;">({{ question.state.value }})</span>
+          </div>
+        </div>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>No questions yet.</p>
+{% endif %}
+{% endblock %}
