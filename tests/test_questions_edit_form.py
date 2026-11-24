@@ -56,3 +56,36 @@ def test_edit_question_form_uses_creation_fields_and_hides_response_internals(
     assert 'name="probability"' not in html
     assert 'name="is_winner"' not in html
     assert 'name="isWinner"' not in html
+
+
+def test_new_question_form_has_add_response_button(client):
+    response = client.get("/questions/new")
+    html = response.get_data(as_text=True)
+
+    assert response.status_code == 200
+    assert 'id="add-response-btn"' in html
+    assert html.count('name="responses"') >= 2
+
+
+def test_create_question_with_three_responses(client, category):
+    response = client.post(
+        "/questions",
+        data={
+            "title": "¿Qué color ganará la carrera?",
+            "body": "Predicción de color ganador.",
+            "date": "2026-12-31",
+            "source": "",
+            "category": category.title,
+            "tags": "carreras",
+            "responses": ["Rojo", "Azul", "Verde"],
+        },
+        follow_redirects=True,
+    )
+
+    html = response.get_data(as_text=True)
+    assert response.status_code == 200
+    assert "Question created successfully." in html
+    assert "Rojo" in html
+    assert "Azul" in html
+    assert "Verde" in html
+
