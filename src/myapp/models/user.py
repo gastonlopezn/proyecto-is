@@ -1,7 +1,8 @@
+from werkzeug.security import check_password_hash, generate_password_hash
+
 from myapp.extensions import db
 from myapp.models.prediction_author import PredictionAuthor
 from myapp.models.role_type import RoleType
-from werkzeug.security import check_password_hash, generate_password_hash
 
 
 class User(PredictionAuthor, db.Model):
