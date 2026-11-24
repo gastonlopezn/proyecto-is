@@ -2,6 +2,14 @@ import sqlalchemy as sa
 from alembic import command
 from alembic.config import Config as AlembicConfig
 
+from myapp.config import BASE_DIR, INSTANCE_DIR
+
+
+def test_app_instance_path_points_to_root_instance_directory(app):
+    assert INSTANCE_DIR == BASE_DIR / "instance"
+    assert app.instance_path == str(INSTANCE_DIR)
+    assert INSTANCE_DIR.is_dir()
+
 
 def test_all_tables_migration_upgrade_and_downgrade(tmp_path, monkeypatch):
     """Test that alembic upgrade head creates all tables (domain, user, position) and downgrade removes them."""

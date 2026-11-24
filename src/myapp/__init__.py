@@ -1,11 +1,14 @@
+import os
+
 from flask import Flask
 
-from myapp.config import Config
+from myapp.config import INSTANCE_DIR, Config
 from myapp.extensions import db, migrate
 
 
 def create_app(config_class=Config):
-    app = Flask(__name__)
+    app = Flask(__name__, instance_path=str(INSTANCE_DIR))
+    os.makedirs(app.instance_path, exist_ok=True)
 
     app.config.from_object(config_class)
 
