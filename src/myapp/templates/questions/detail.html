@@ -38,4 +38,12 @@
   <a href="{{ url_for('questions.edit', question_id=question.id) }}">Edit question</a>
   <a href="{{ url_for('questions.index') }}">Back to questions</a>
 </nav>
+
+<form
+  method="post"
+  action="{{ url_for('questions.delete', question_id=question.id) }}"
+  class="delete-question"
+>
+  <button type="submit">Delete question</button>
+</form>
 {% endblock %}
