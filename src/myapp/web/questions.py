@@ -1,105 +1,41 @@
 import uuid
-from datetime import UTC, datetime
 
 from flask import Blueprint, abort, flash, redirect, render_template, request, url_for
 
-from myapp.extensions import db
-from myapp.models import Category, Question, Response, Tag
+from myapp.models import Question
 from myapp.services.categories import get_all_categories
+from myapp.services.questions import (
+    QuestionValidationError,
+    create_question,
+    delete_question,
+    get_question,
+    list_questions,
+    update_question,
+)
 
 questions_bp = Blueprint("questions", __name__, url_prefix="/questions")
 
 
 def get_question_or_404(question_id: str | uuid.UUID) -> Question:
     """Busca una pregunta por UUID o aborta con 404 si no existe o el ID es inválido."""
-    if isinstance(question_id, uuid.UUID):
-        parsed_id = question_id
-    else:
-        try:
-            parsed_id = uuid.UUID(str(question_id))
-        except (ValueError, TypeError):
-            abort(404)
-
-    question = db.session.get(Question, parsed_id)
+    question = get_question(question_id)
     if question is None:
         abort(404)
     return question
 
 
-def _parse_and_validate_question_form(form):
-    """Extrae y valida los campos del formulario de creación/edición de pregunta."""
-    title = form.get("title", "").strip()
-    body = form.get("body", "").strip()
-    date_raw = form.get("date", "").strip()
-    source = form.get("source", "").strip()
-    category_title = form.get("category", "").strip()
-    tags_raw = form.get("tags", "").strip()
+def _extract_form_data(form) -> dict[str, object]:
+    """Extrae y normaliza los campos del formulario HTML para enviarlos al servicio."""
     raw_responses = form.getlist("responses")
-    clean_responses = [r.strip() for r in raw_responses if r.strip()]
-
-    form_data = {
-        "title": title,
-        "body": body,
-        "date": date_raw,
-        "source": source,
-        "category": category_title,
-        "tags": tags_raw,
+    return {
+        "title": form.get("title", "").strip(),
+        "body": form.get("body", "").strip(),
+        "date": form.get("date", "").strip(),
+        "source": form.get("source", "").strip(),
+        "category": form.get("category", "").strip(),
+        "tags": form.get("tags", "").strip(),
         "responses": [r.strip() for r in raw_responses] or ["", ""],
     }
-
-    field_errors: dict[str, str] = {}
-    parsed_date = None
-
-    if not title:
-        field_errors["title"] = "Title is required."
-    if not body:
-        field_errors["body"] = "Body is required."
-
-    if not date_raw:
-        field_errors["date"] = "Date is required."
-    else:
-        try:
-            parsed_date = datetime.strptime(date_raw, "%Y-%m-%d").replace(tzinfo=UTC)
-        except ValueError:
-            field_errors["date"] = "Invalid date format."
-
-    category = db.session.get(Category, category_title) if category_title else None
-    if not category_title:
-        field_errors["category"] = "Category is required."
-    elif category is None:
-        field_errors["category"] = "Selected category does not exist."
-
-    if len(clean_responses) < Question.MIN_RESPONSES:
-        field_errors["responses"] = "At least two responses are required."
-
-    errors = list(field_errors.values())
-    tag_titles = [t.strip() for t in tags_raw.split(",") if t.strip()]
-
-    parsed_payload = {
-        "title": title,
-        "body": body,
-        "date": parsed_date,
-        "source": source or None,
-        "category": category,
-        "tag_titles": tag_titles,
-        "response_titles": clean_responses,
-    }
-    return parsed_payload, form_data, errors, field_errors
-
-
-def _resolve_tags(tag_titles: list[str]) -> list[Tag]:
-    tags: list[Tag] = []
-    seen: set[str] = set()
-    for title in tag_titles:
-        if title in seen:
-            continue
-        seen.add(title)
-        tag = db.session.get(Tag, title)
-        if tag is None:
-            tag = Tag(title=title)
-            db.session.add(tag)
-        tags.append(tag)
-    return tags
 
 
 @questions_bp.app_errorhandler(404)
@@ -109,7 +45,7 @@ def not_found_error(_error):
 
 @questions_bp.get("/")
 def index():
-    questions = db.session.scalars(db.select(Question)).all()
+    questions = list_questions()
     return render_template(
         "questions/index.html",
         questions=questions,
@@ -129,33 +65,22 @@ def new():
 @questions_bp.post("")
 @questions_bp.post("/")
 def create():
-    payload, form_data, errors, field_errors = _parse_and_validate_question_form(
-        request.form
-    )
-    if errors:
+    form_data = _extract_form_data(request.form)
+    try:
+        question = create_question(form_data)
+    except QuestionValidationError as exc:
         return (
             render_template(
                 "questions/new.html",
                 question=None,
                 categories=get_all_categories(),
                 form_data=form_data,
-                errors=errors,
-                field_errors=field_errors,
+                errors=exc.errors,
+                field_errors=exc.field_errors,
             ),
             400,
         )
 
-    question = Question(
-        title=payload["title"],
-        body=payload["body"],
-        date=payload["date"],
-        source=payload["source"],
-        category=payload["category"],
-        tags=_resolve_tags(payload["tag_titles"]),
-        responses=[Response(title=title) for title in payload["response_titles"]],
-    )
-    db.session.add(question)
-    db.session.commit()
     flash("Question created successfully.", "success")
     return redirect(url_for("questions.detail", question_id=question.id))
 
@@ -183,30 +108,22 @@ def edit(question_id: str):
 @questions_bp.post("/<question_id>")
 def update(question_id: str):
     question = get_question_or_404(question_id)
-    payload, form_data, errors, field_errors = _parse_and_validate_question_form(
-        request.form
-    )
-    if errors:
+    form_data = _extract_form_data(request.form)
+    try:
+        update_question(question, form_data)
+    except QuestionValidationError as exc:
         return (
             render_template(
                 "questions/edit.html",
                 question=question,
                 categories=get_all_categories(),
                 form_data=form_data,
-                errors=errors,
-                field_errors=field_errors,
+                errors=exc.errors,
+                field_errors=exc.field_errors,
             ),
             400,
         )
 
-    question.title = payload["title"]
-    question.body = payload["body"]
-    question.date = payload["date"]
-    question.source = payload["source"]
-    question.category = payload["category"]
-    question.tags = _resolve_tags(payload["tag_titles"])
-    question.responses = [Response(title=title) for title in payload["response_titles"]]
-    db.session.commit()
     flash("Question updated successfully.", "success")
     return redirect(url_for("questions.detail", question_id=question.id))
 
@@ -214,7 +131,6 @@ def update(question_id: str):
 @questions_bp.post("/<question_id>/delete")
 def delete(question_id: str):
     question = get_question_or_404(question_id)
-    db.session.delete(question)
-    db.session.commit()
+    delete_question(question)
     flash("Question deleted successfully.", "success")
     return redirect(url_for("questions.index"))
