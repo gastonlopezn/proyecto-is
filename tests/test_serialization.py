@@ -1,6 +1,5 @@
 import uuid
-from datetime import datetime, UTC
-import pytest
+from datetime import UTC, datetime
 
 from myapp.extensions import db
 from myapp.models import Category, Question, Response, StateType, Tag
